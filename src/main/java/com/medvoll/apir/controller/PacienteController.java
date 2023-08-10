@@ -66,7 +66,7 @@ public class PacienteController {
 	@Transactional
 	public ResponseEntity<Void>  elminiarPaciente(@RequestParam Long id) {
 		Paciente paciente = pacienteRepository.getReferenceById(id);
-		paciente.descactivarPaciente();
+		pacienteRepository.delete(paciente);
 		return ResponseEntity.noContent().build();
 		
 	}

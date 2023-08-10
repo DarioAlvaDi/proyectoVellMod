@@ -37,7 +37,6 @@ public class Paciente {
 	private String email;
 	private String documento;
 	private String telefono;
-	private Boolean activo;
 	@Embedded
 	Direccion direccion;
 	
@@ -52,7 +51,6 @@ public class Paciente {
 		this.documento = datosRegistroPaciente.documento();
 		this.telefono = datosRegistroPaciente.telefono();
 		this.direccion = new Direccion(datosRegistroPaciente.direccion());
-		this.activo = true;
 		
 	}
 	
@@ -72,9 +70,6 @@ public class Paciente {
 	
 	}
 	
-	public void descactivarPaciente() {
-		this.activo = false;
-	}
 
 		
 }
