@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.Authentication;
 
+import com.medvoll.apir.infra.security.DatosJWToken;
 import com.medvoll.apir.infra.security.TokenService;
 import com.medvoll.apir.usuarios.DatosAutenticacionUsuario;
+import com.medvoll.apir.usuarios.Usuario;
 
 import jakarta.validation.Valid;
 
@@ -28,10 +30,10 @@ public class AutenticacionController {
 	private TokenService tokenService;
 	
 	@PostMapping
-	public ResponseEntity<String> autenticacionUsuario(@RequestBody @Valid DatosAutenticacionUsuario datosAutenticacionUsuario){
+	public ResponseEntity<DatosJWToken> autenticacionUsuario(@RequestBody @Valid DatosAutenticacionUsuario datosAutenticacionUsuario){
 		Authentication token = new UsernamePasswordAuthenticationToken(datosAutenticacionUsuario.login(),datosAutenticacionUsuario.clave());
-		autenticacionManager.authenticate(token);
-		String JWToken = tokenService.generarJWT();
-		return ResponseEntity.ok(JWToken);
+		Authentication usuarioAutenticado = autenticacionManager.authenticate(token);
+		String JWToken = tokenService.generarJWT((Usuario)usuarioAutenticado.getPrincipal());
+		return ResponseEntity.ok(new DatosJWToken (JWToken));
 	}
 }
