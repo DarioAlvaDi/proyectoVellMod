@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.Authentication;
+
+import com.medvoll.apir.infra.security.TokenService;
 import com.medvoll.apir.usuarios.DatosAutenticacionUsuario;
 
 import jakarta.validation.Valid;
@@ -22,11 +24,14 @@ public class AutenticacionController {
 	@Autowired
 	private AuthenticationManager autenticacionManager;
 	
+	@Autowired 
+	private TokenService tokenService;
 	
 	@PostMapping
-	public ResponseEntity<Void> autenticacionUsuario(@RequestBody @Valid DatosAutenticacionUsuario datosAutenticacionUsuario){
+	public ResponseEntity<String> autenticacionUsuario(@RequestBody @Valid DatosAutenticacionUsuario datosAutenticacionUsuario){
 		Authentication token = new UsernamePasswordAuthenticationToken(datosAutenticacionUsuario.login(),datosAutenticacionUsuario.clave());
 		autenticacionManager.authenticate(token);
-		return ResponseEntity.ok().build();
+		String JWToken = tokenService.generarJWT();
+		return ResponseEntity.ok(JWToken);
 	}
 }
